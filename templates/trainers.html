@@ -1,0 +1,307 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Тренеры</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    </head>
+    <body>
+
+        <div class="header-line">
+           <div class="header-logo">
+               <div class="logo_img">
+                   <img src="{{ url_for('static', filename='logo_img.png') }}">
+               </div>
+
+               <div class="header-line-text">
+                   <div class="logo_text">EnergyFlow</div>
+                   <div class="other-text">ЛИЧНЫЙ КАБИНЕТ</div>
+               </div>
+           </div>
+
+            <div class="header-exit">
+               <a href="/" class="exit-button">Главная страница</a>
+           </div>
+        </div>
+
+        <div class="navigation-bar">
+            <button class="nav-button" id="trainers-button">Тренеры</button>
+            <button class="nav-button" id="profile-button">Профиль</button>
+            <button class="nav-button" id="memberships-button">Абонементы</button>
+        </div>
+
+        <div class="trainers-container">
+            <div class="trainers-images">
+                {% for trainer in trainers_info %}
+                    <div class="trainer-image-wrapper">
+                        <img src="{{ url_for('static', filename='trainer_images/' + trainer[5]) }}" alt="Trainer Image" class="trainer-image" data-trainer-id="{{ trainer[0] }}">
+                        <div class="trainer-specialization">{{ trainer[4] }}</div> <!-- Добавлено поле специализации -->
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <img src="" alt="Trainer Thumbnail" id="trainer-thumbnail">
+                <div class="modal-content-info">
+                    <h2 id="trainer-name"></h2>
+                    <p>Специализация: <span id="trainer-specialization"></span></p>
+                    <p>Телефон: <span id="trainer-phone"></span></p>
+                    <p>Email: <span id="trainer-email"></span></p>
+                    <button id="showWorkouts" data-trainer-id="">Показать тренировки</button>
+                </div>
+                <span class="close" id="closeModal">&times;</span>
+
+            </div>
+
+        </div>
+
+        <div id="workoutModal" class="modal">
+            <div class="modal-content">
+                <div id="workoutInfo" class="workout-description"></div>
+                <span class="close" id="closeWorkoutsModal">&times;</span>
+            </div>
+        </div>
+
+        <script>
+            // Обработчики событий JavaScript
+            const closeModal = document.getElementById('closeModal');
+            const modal = document.getElementById('myModal');
+            const body = document.body;
+
+            closeModal.addEventListener('click', function() {
+                modal.style.display = 'none';
+                body.classList.remove('modal-open');
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    body.classList.remove('modal-open');
+                }
+            });
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    modal.style.display = 'none';
+                    body.classList.remove('modal-open');
+                }
+            });
+
+            // Обработчик клика по кнопке профиля, перенаправляющий пользователя на страницу профиля.
+            document.getElementById('profile-button').addEventListener('click', function() {
+                window.location.href = '/prof';
+            });
+
+            document.getElementById('memberships-button').addEventListener('click', function() {
+                window.location.href = '/memberships';
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Получение элементов страницы
+                const showWorkoutsBtn = document.getElementById('showWorkouts');
+                const trainersButton = document.getElementById('trainers-button');
+                const buttons = document.querySelectorAll('.nav-button');
+                const modal = document.getElementById('myModal');
+
+                // Установка класса 'active' для кнопки тренеров по умолчанию
+                trainersButton.classList.add('active');
+
+                // Добавление обработчиков событий для кнопок навигации
+                buttons.forEach(button => {
+                    // Обработчик события наведения курсора на кнопку
+                    button.addEventListener('mouseover', function() {
+                        buttons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+
+                    // Обработчик события ухода курсора с кнопки
+                    button.addEventListener('mouseout', function() {
+                        if (this !== trainersButton) {
+                            this.classList.remove('active');
+                            trainersButton.classList.add('active');
+                        }
+                    });
+                });
+
+                // Обработчики событий для закрытия модального окна
+                closeModal.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                });
+
+                window.addEventListener('click', function(event) {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape') {
+                        modal.style.display = 'none';
+                    }
+                });
+
+                // Обработчик клика по изображению тренера в модальном окне
+                document.querySelectorAll('.trainer-image-wrapper').forEach(wrapper => {
+                wrapper.addEventListener('click', function() {
+                    const image = this.querySelector('.trainer-image'); // Находим изображение внутри wrapper
+                    const trainerId = image.dataset.trainerId; // Получаем ID тренера из data-trainer-id
+
+                    showWorkoutsBtn.setAttribute('data-trainer-id', trainerId);
+
+                    // Получение информации о тренере через API
+                    fetch(`/get_trainer_info/${trainerId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Обновление информации в модальном окне
+                            document.getElementById('trainer-name').innerText = data.name;
+                            document.getElementById('trainer-email').innerText = data.email;
+                            document.getElementById('trainer-phone').innerText = data.phone;
+                            document.getElementById('trainer-specialization').innerText = data.specialization;
+                            document.getElementById('trainer-thumbnail').src = image.src; // Используем src изображения
+                            modal.style.display = 'block';
+                            body.classList.add('modal-open');  // Добавление класса при открытии модального окна
+                        })
+                        .catch(error => console.log('Ошибка:', error));
+                });
+            });
+
+
+                // Обработчик клика по кнопке "Показать тренировки"
+                showWorkoutsBtn.addEventListener('click', function() {
+                    const trainerId = this.getAttribute('data-trainer-id');
+
+                    // Очистка содержимого workoutInfo перед открытием нового модального окна
+                    document.getElementById('workoutInfo').innerHTML = '';
+
+                    // Создание нового workoutModal
+                    const workoutModal = document.getElementById('workoutModal');
+                    workoutModal.style.display = 'block';
+
+                    fetch(`/get_workout_info/${trainerId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const workoutInfo = document.getElementById('workoutInfo');
+
+                            if (data && data.length > 0) {
+                                data.forEach(workout => {
+                                    const workoutElement = document.createElement('div');
+                                    const schedule = workout.WORKOUT_SCHEDULE;
+
+                                    let formattedSchedule = '';
+                                    for (let day in schedule) {
+                                        formattedSchedule += `<span>${day}: ${schedule[day]} </span><button class="sign-up-button" data-user-id="{{ session['user_id'] }}" data-workout-id="${workout.WORKOUT_ID}">📝</button><br>`;
+                                    }
+
+                                    workoutElement.innerHTML = `
+                                        <div class="workout-info">
+                                            <h3>${workout.NAME}</h3>
+                                            <p>${workout.DESCRIPTION}</p>
+                                            <p>Макс. участников: ${workout.MAX_PARTICIPANTS}</p>
+                                            <p>Стоимость: ${workout.COST} BYN</p>
+                                            <p>Расписание:<br> ${formattedSchedule}</p>
+                                        </div>
+                                    `;
+                                    workoutInfo.appendChild(workoutElement);
+                                });
+                            } else {
+                                workoutInfo.innerHTML = '<div class="workout-info-none"><p>Тренировки временно отсутствуют...</p></div>';
+                            }
+                        })
+                        .catch(error => console.log('Ошибка:', error));
+
+                    // Обработчик клика на кнопку закрытия workoutModal
+                    const closeWorkoutsModal = document.getElementById('closeWorkoutsModal');
+                    closeWorkoutsModal.addEventListener('click', function() {
+                        workoutModal.style.display = 'none'; // Скрыть окно workoutModal
+                    });
+
+                    // Добавить обработчики событий для workoutModal
+                    window.addEventListener('click', function(event) {
+                        if (event.target === workoutModal) {
+                            workoutModal.style.display = 'none';
+                        }
+                    });
+
+                    document.addEventListener('keydown', function(event) {
+                        if (event.key === 'Escape') {
+                            workoutModal.style.display = 'none';
+                        }
+                    });
+                });
+
+                // Функция для определения даты ближайшего дня недели
+                function getNextDayOfWeek(day) {
+                    console.log('day', day)
+                    const daysOfWeek = [
+                    "воскресенье",
+                    "понедельник",
+                    "вторник",
+                    "среда",
+                    "четверг",
+                    "пятница",
+                    "суббота",
+                    ];
+                    const currentDate = new Date();
+                    const currentDay = currentDate.getDay();
+                    const targetDay = daysOfWeek.indexOf(day.toLowerCase());
+                    console.log('target', targetDay)
+
+                    let difference = targetDay - currentDay;
+                    if (difference <= 0) {
+                    difference += 7;
+                    }
+
+                    const nextDay = new Date(currentDate);
+                    nextDay.setDate(currentDate.getDate() + difference);
+                    console.log('nextDay',nextDay)
+                    return nextDay;
+                }
+
+                // Обработчик клика на кнопку записи на тренировку
+                document.getElementById('workoutInfo').addEventListener('click', function (event) {
+                    if (event.target.classList.contains('sign-up-button')) {
+                        const workoutId = event.target.getAttribute('data-workout-id');
+                        const userId = event.target.getAttribute('data-user-id');
+
+                        const scheduleText = event.target.previousElementSibling.textContent; // Получаем текст с расписанием
+                        const day = scheduleText.split(':')[0]; // Извлекаем текст дня
+                        const time = scheduleText.split(':')[1] + ':' + scheduleText.split(':')[2];
+                        console.log('Schedule:', day, '\nTime:', time);
+
+                        // Определяем дату для этого дня
+                        const targetDate = getNextDayOfWeek(day);
+
+                        // Формируем данные для запроса
+                        const data = {
+                            user_id: userId,
+                            workout_id: workoutId,
+                            visit_date: targetDate.toISOString().split('T')[0], // Устанавливаем ближайший день недели
+                            visit_time: time
+                        };
+
+                        fetch('/member_workout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.text()) // Получаем текст ответа от сервера
+                    .then(message => {
+                        alert(message); // Выводим текст ответа в сообщении пользователю
+                    })
+                    .catch(error => console.error('Ошибка:', error));
+                    }
+                });
+
+            });
+        </script>
+
+
+    </body>
+    </html>

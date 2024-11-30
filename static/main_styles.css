@@ -1,0 +1,79 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('jym_image.jpeg');
+    background-size: 100% 100%;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.main_content {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.header-line {
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    width: 100%;
+}
+
+.logo_container {
+    margin: 30px;
+    color: #6A5C3E  ;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+.logo_text {
+    margin-top: -5px;
+}
+
+.text_container {
+    margin-left: 100px;
+    margin-top: 100px;
+    color: white;
+    font-size: 40px;
+    width: 55%;
+}
+
+.big_text {
+    font-size: 40px;
+}
+
+.small_text {
+    font-size: 25px;
+    margin-top: 30px;
+}
+
+.small_text p {
+    margin: 0;
+    margin-top: 10px;
+}
+
+.button_container{
+    margin-left: 400px;
+    margin-top: -15px;
+    display: flex;
+    gap: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    text-decoration: none;
+    border: 2px solid #6A5C3E;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+    display: inline;
+    letter-spacing: 2px;
+}
+
+.button:hover {
+    background-color: #41372A;
+}

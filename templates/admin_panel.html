@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель админа</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="header-line">
+       <div class="header-logo">
+           <div class="logo_img">
+               <img src="{{ url_for('static', filename='logo_img.png') }}">
+           </div>
+
+           <div class="header-line-text">
+               <div class="logo_text">EnergyFlow</div>
+
+               <div class="other-text">ПАНЕЛЬ УПРАВЛЕНИЯ</div>
+           </div>
+       </div>
+
+        <div class="header-exit">
+           <a href="/" class="exit-button">Выйти на главную</a>
+       </div>
+    </div>
+
+    <div class="admin_workspace">
+
+        <div class="actions-on-trainers">
+
+            <div class="workspace_title">ДЕЙСТВИЯ НАД ТРЕНЕРАМИ</div>
+
+            <div class="find-trainer-workspace">
+                <button id="find-trainers-button">Найти тренера</button>
+
+                <div class="hidden-content" id="hiddenContent3" style="display: {{ 'block' if show_view_trainer_form else 'none' }}">
+
+                    <form action="/find_trainer" method="POST" class="find_trainer">
+                        <input type="text" id="find_trainer" name="trainer_name" value="{{ trainer_name }}" placeholder="Id тренера / Все / Имя тренера">
+                        <button type="submit" class="find-trainer-button">Найти</button>
+                    </form>
+
+                    <div class="trainers-text-content">
+                        {{ generated_trainer_data | safe }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="update-trainer-workspace">
+                <button id="show-update-trainer">{% if update_trainer_success %}Изменение прошло успешно!{% else %}Изменить данные тренера{% endif %}</button>
+
+                <div class="hidden-content" id="hiddenContent5" style="display:{{ 'block' if show_update_trainer_form else 'none' }}">
+                    <form id="find-updated-trainer-form">
+                        <input type="text" id="trainer_id" name="trainer_id" placeholder="Id тренера" required value="{{trainer_id}}">
+                        <button type="submit" id="go-to-update" >К редактированию</button>
+                    </form>
+                </div>
+
+                <div class="hidden-content" id="hiddenContent6" style="display:{{ 'block' if show_update_trainer_form else 'none' }}">
+                    <form id="update-trainer-form" action="/update_trainer" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" id="update-trainer_id" name="trainer_id" value="{{trainer_id}}">
+                        <input type="text" id="update-trainer_name" name="trainer_name" placeholder="Имя Фамилия" required value="{{trainer_name}}">
+                        <input type="email" id="update-trainer_email" name="trainer_email" placeholder="Почта" required value="{{trainer_email}}"
+                        pattern="^(&quot;(?:\\\\&quot;|[^&quot;])+&quot;|[-a-zA-Z0-9!#$%&amp;'*+/=?^_`{|}~.,():;<>@[\] ]+)(\((?:\\\\&quot;|[^&quot;]) *\))*@[-a-zA-Z0-9]+(\.[-a-zA-Z0-9]+)*(\.[a-zA-Z]{2,})$">
+                        <input type="tel" id="update-trainer_phone" name="trainer_phone" placeholder="Номер телефона" required value="{{trainer_phone}}" pattern="^\+375 \((25|29|33|44)\) \d{3}-\d{2}-\d{2}$"
+                        title="+375 (25/29/33/44) XXX-XX-XX">
+                        <input type="text" id="update-trainer_specialization" name="trainer_specialization" placeholder="Специализация" required value="{{trainer_specialization}}">
+                        <input type="file" id="update-trainer_img" name="trainer_img" placeholder="Выберите файл">
+                        <button type="submit" class="update-trainer-button">Изменить</button>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="add-trainer-workspace">
+                <button id="add-trainer-button">{% if add_trainer_success %}Добавление прошло успешно!{% else %}Добавить тренера{% endif %}</button>
+
+                <div class="hidden-content" id="hidden-add-trainer-form" style="display:{{ 'block' if show_add_trainer_form else 'none' }}">
+                    <form id="add-trainer-form" action="/add_trainer" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" id="add-trainer_id" name="trainer_id" value="{{trainer_id}}">
+                        <input type="text" id="add-trainer_name" name="add_trainer_name" placeholder="Имя Фамилия" required value="{{add_trainer_name}}">
+                        <input type="email" id="add-trainer_email" name="trainer_email" placeholder="Почта" required value="{{trainer_email}}"
+                        pattern="^(&quot;(?:\\\\&quot;|[^&quot;])+&quot;|[-a-zA-Z0-9!#$%&amp;'*+/=?^_`{|}~.,():;<>@[\] ]+)(\((?:\\\\&quot;|[^&quot;]) *\))*@[-a-zA-Z0-9]+(\.[-a-zA-Z0-9]+)*(\.[a-zA-Z]{2,})$"
+                        class="{{ 'error' if 'email' in errors else '' }}">
+                        <input type="tel" id="add-trainer_phone" name="trainer_phone" placeholder="Номер телефона" required value="{{trainer_phone}}"
+                        pattern="^\+375 \((25|29|33|44)\) \d{3}-\d{2}-\d{2}$" class="{{ 'error' if 'phone' in errors else '' }}" title="+375 (25/29/33/44) XXX-XX-XX">
+                        <input type="text" id="add-trainer_specialization" name="trainer_specialization" placeholder="Специализация" required value="{{trainer_specialization}}">
+                        <input type="file" id="add-trainer_img" name="trainer_img" placeholder="Выберите файл" required >
+                        <button type="submit" class="add-trainer-button">Добавить</button>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="delete-trainer-workspace">
+                <button id="delete-trainer-button">
+                    {% if delete_trainer_success %}Удаление прошло успешно!{% else %}Удалить тренера{% endif %}
+                </button>
+
+                <div class="hidden-content" id="hiddenContent4" style="display:{{ 'block' if show_trainer_delete_form else 'none' }}">
+                    <form id="delete-trainer-form" action="/delete_trainer" method="POST">
+                        <input type="text" id="delete-trainer_id" name="trainer_id" placeholder="Id тренера"  required class="{{ 'error' if 'trainer_id' in errors else '' }}" value="{{trainer_id}}" >
+                        <button type="submit" class="delete-trainer-button">Удалить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="center">
+
+            <div class="actions-on-users">
+
+                <div class="workspace_title">ДЕЙСТВИЯ НАД ПОЛЬЗОВАТЕЛЯМИ</div>
+
+                <div class="find-user-workspace">
+                    <button id="find-users-button">Найти пользователя</button>
+
+                    <div class="hidden-content" id="hidden-find-user-form" style="display: {{ 'block' if show_view_user_form else 'none' }}">
+
+                        <form action="/find_user" method="POST">
+                            <input type="text" id="find_user" name="username" value="{{ username }}" placeholder="Id пользователя / Все / Логин пользователя">
+                            <button type="submit" class="find-user-button">Найти</button>
+                        </form>
+
+                        <div class="users-text-content">
+                                {{generated_user_data | safe}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="delete-user-workspace">
+                    <button id="delete-user-button">
+                        {% if delete_user_success %}Пользователь успешно удален!{% else %}Удалить пользователя{% endif %}
+                    </button>
+
+                    <div class="hidden-content" id="hiddenContent2" style="display:{{ 'block' if show_user_delete_form else 'none' }}">
+                        <form id="delete-user-form" action="/delete_user" method="POST">
+                            <input type="text" id="delete-user_id" name="user_id" placeholder="Id пользователя"  required class="{{ 'error' if 'user_id' in errors else '' }}" value="{{user_id}}" >
+                            <button type="submit" class="delete-user-button">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions-on-db">
+
+                <div class="workspace_title">ДЕЙСТВИЯ НАД БД</div>
+
+                <div class="export-db-workspace">
+
+                    <button id="export_db_to_json_button">{% if json_success %}Экспортировано успешно!{% else %}Экспортировать БД в JSON{% endif %}</button>
+
+                    <div class="hidden-content" id="hidden-export-database-form" style="display:  {{ 'block' if show_json_form else 'none' }}">
+                        <form action="/export_whole_database" method="POST" enctype="multipart/form-data">
+                            <input type="text" id="json-path" name="json_path" placeholder="Путь к папке для сохранения" required class="{{ 'error' if 'json_path' in errors else '' }}" value="{{json_path}}">
+                            <button type="submit" id="json-done-button">Экспортировать</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="actions-on-workouts">
+
+            <div class="workspace_title">ДЕЙСТВИЯ НАД ТРЕНИРОВКАМИ</div>
+
+            <div class="find-workout-workspace">
+                <button id="find-workouts-button">Найти тренировку</button>
+
+                <div class="hidden-content" id="hidden-find-workout-form" style="display: {{ 'block' if show_view_workout_form else 'none' }}">
+                    <form action="/find_workout" method="POST">
+                        <input type="text" id="find_workout" name="workout_name" value="{{ workout_name }}" placeholder="Id тренировки / Все / Название тренировки">
+                        <button type="submit" class="find-workout-button">Найти</button>
+                    </form>
+
+                    <div class="workouts-text-content">
+                            {{generated_workout_data | safe}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="update-workout-workspace">
+
+                <button id="show-update-workout">
+                    {% if update_workout_success %}Изменение прошло успешно!{% else %}Изменить информацию тренировки{% endif %}
+                </button>
+
+                <div class="hidden-content" id="hidden-find-updated-workout-form" style="display:{{ 'block' if show_update_workout_form else 'none' }}">
+                    <form id="find-updated-workout-form">
+                        <input type="text" id="workout_id" name="workout_id" placeholder="Id тренировки" required value="{{workout_id}}">
+                        <button type="submit" id="go-to-update2" >К редактированию</button>
+                    </form>
+                </div>
+
+
+                <div class="hidden-content" id="hidden-update-workout-form" style="display:{{ 'block' if show_update_workout_form else 'none' }}">
+                    <form id="update-workout-form" action="/update_workout" method="POST">
+                        <input type="hidden" id="update-workout_id" name="update-workout_id" value="">
+                        <input type="text" id="update-workout_name" name="workout_name" placeholder="Название тренировки" required value="{{ workout_name }}">
+                        <textarea id="update-workout_description" name="workout_description" placeholder="Описание тренировки" required>{{ workout_description }}</textarea>
+                        <input type="text" id="update-workout_max_participants" name="workout_max_participants" placeholder="Макс. количество участников" required value="{{ workout_max_participants }}">
+                        <input type="text" id="update-workout_cost" name="workout_cost" placeholder="Стоимость" required value="{{ workout_cost }}">
+                        <textarea id="update-workout_schedule" name="workout_schedule" placeholder="График тренировок" required onkeydown="handleEnterKey(event)"
+                        title="Генерация шаблона — курсор в конце строки + Enter" class="{{ 'error' if 'day_time' in errors else '' }}">{{ workout_schedule }}</textarea>
+                        <button type="submit" class="update-workout-button">Изменить</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="add-workout-workspace">
+                <button id="add-workout-button">{% if add_workout_success %}Добавление прошло успешно!{% else %}Добавить тренировку{% endif %}</button>
+                <div class="hidden-content" id="hidden-add-workout-form" style="display:{{ 'block' if show_add_workout_form else 'none' }}">
+                    <form id="add-workout-form" action="/add_workout" method="POST">
+                        <input type="text" id="workout-added-trainer_id" name="trainer_id" placeholder="Id тренера" required value="{{trainer_id}}" class="{{ 'error' if 'trainer_id' in errors else '' }}">
+                        <input type="text" id="add-workout_name" name="add_workout_name" placeholder="Название тренировки" required value="{{add_workout_name}}">
+                        <textarea id="add-workout_description" name="workout_description" placeholder="Описание тренировки" required>{{workout_description}}</textarea>
+                        <input type="text" id="add-workout_max_participants" name="workout_max_participants" placeholder="Макс. участников" required value="{{workout_max_participants}}">
+                        <input type="text" id="add-workout_cost" name="workout_cost" placeholder="Стоимость" required value="{{workout_cost}}">
+                        <textarea id="workout_schedule" name="workout_schedule" placeholder="График тренировок" required onkeydown="handleEnterKey(event)" onfocus="setScheduleTemplate(this)"
+                        title="Генерация шаблона — курсор в конце строки + Enter" class="{{ 'error' if 'day_time' in errors else '' }}">{{workout_schedule}}</textarea>
+                        <button type="submit" class="add-workout-button">Добавить</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="delete-trainer-workspace">
+                <button id="delete-workout-button">
+                    {% if delete_workout_success %}Удаление прошло успешно!{% else %}Удалить тренировку{% endif %}
+                </button>
+
+                <div class="hidden-content" id="hidden-delete-workout-form" style="display:{{ 'block' if show_workout_delete_form else 'none' }}">
+                    <form id="delete-workout-form" action="/del_workout" method="POST">
+                        <input type="text" id="delete-workout_id" name="workout_id" placeholder="Id тренировки"  required class="{{ 'error' if 'workout_id' in errors else '' }}" value="{{workout_id}}" >
+                        <button type="submit" class="delete-workout-button">Удалить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Получаем значение workout_id
+            var workoutId = "{{ workout_id }}";
+
+            // Присваиваем полученное значение workout_id полю update-workout_id
+            document.getElementById('update-workout_id').value = workoutId;
+        });
+    </script>
+
+    <script>
+        function setScheduleTemplate(input) {
+            const template = 'День: час:мин';
+            input.value = template;
+        }
+
+        function handleEnterKey(event) {
+            const textarea = event.target;
+            const template = 'День: час:мин';
+
+            if (event.key === 'Enter') {
+                event.preventDefault();
+
+                const cursorPosition = textarea.selectionStart;
+                const textBeforeCursor = textarea.value.substring(0, cursorPosition);
+                const textAfterCursor = textarea.value.substring(cursorPosition);
+
+                textarea.value = textBeforeCursor + '\n' + template + textAfterCursor;
+                textarea.selectionStart = cursorPosition + template.length + 1;
+                textarea.selectionEnd = cursorPosition + template.length + 1;
+            }
+        }
+    </script>
+
+    <script>
+        document.getElementById("show-update-workout").addEventListener("click", function () {
+            var form = document.getElementById("hidden-update-workout-form");
+
+            if (form.style.display === "block") {
+
+                // Очистка полей формы при каждом нажатии на кнопку
+                document.getElementById("workout_id").value = '';
+                document.getElementById("update-workout_name").value = '';
+                document.getElementById("update-workout_description").value = '';
+                document.getElementById("update-workout_max_participants").value = '';
+                document.getElementById("update-workout_cost").value = '';
+                document.getElementById("update-workout_schedule").value = '';
+            }
+        });
+
+        document.getElementById("add-trainer-button").addEventListener("click", function () {
+            var form = document.getElementById("hidden-add-trainer-form");
+
+            if (form.style.display === "block") {
+
+                // Очистка полей формы при каждом нажатии на кнопку
+                document.getElementById("add-trainer_name").value = '';
+                document.getElementById("add-trainer_email").value = '';
+                document.getElementById("add-trainer_email").classList.remove("error");
+                document.getElementById("add-trainer_phone").value = '';
+                document.getElementById("add-trainer_phone").classList.remove("error");
+                document.getElementById("add-trainer_specialization").value = '';
+                document.getElementById("add-trainer_img").value = '';
+            }
+        });
+
+        document.getElementById("add-workout-button").addEventListener("click", function () {
+            var form = document.getElementById("hidden-add-workout-form");
+
+            if (form.style.display === "block") {
+
+                // Очистка полей формы при каждом нажатии на кнопку
+                document.getElementById("workout-added-trainer_id").value = '';
+                document.getElementById("workout-added-trainer_id").classList.remove("error");
+                document.getElementById("add-workout_name").value = '';
+                document.getElementById("add-workout_description").value = '';
+                document.getElementById("add-workout_max_participants").value = '';
+                document.getElementById("add-workout_cost").value = '';
+                document.getElementById("workout_schedule").value = '';
+                document.getElementById("workout_schedule").classList.remove("error");
+            }
+        });
+
+        // Функция для получения данных о тренировке с сервера
+        function fetchWorkoutDataFromServer(workoutId) {
+            fetch("/get_workout_data?workout_id=" + workoutId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+
+                        // Если данные успешно получены, отображаем форму редактирования тренера
+                        document.getElementById("hidden-update-workout-form").style.display = "block";
+
+                        // Если данные успешно получены, заполняем поля формы данными, полученными с сервера
+                        document.getElementById("update-workout_name").value = data.data.name;
+                        document.getElementById("update-workout_description").value = data.data.description;
+                        document.getElementById("update-workout_max_participants").value = data.data.max_participants;
+                        document.getElementById("update-workout_cost").value = data.data.cost;
+                        document.getElementById("update-workout_schedule").value = data.data.schedule;
+                    } else {
+                        // Если success=false, добавьте класс ошибки к полю ввода trainer_id
+                        document.getElementById("workout_id").classList.add("error");
+                        // Скрыть форму редактирования тренера в случае ошибки
+                        document.getElementById("hidden-update-workout-form").style.display = "none";
+
+                        console.error("Произошла ошибка при получении данных тренировки.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Ошибка при получении данных о тренировке:", error);
+
+                });
+        }
+
+    </script>
+
+    <script>
+        document.getElementById("find-updated-trainer-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Отмена действия по умолчанию для submit формы
+
+            var trainerIdInput = document.getElementById("trainer_id");
+            var trainerId = trainerIdInput.value.trim();
+
+            if (trainerId !== "") {
+                document.getElementById("update-trainer_id").value = trainerId;
+                fetchTrainerDataFromServer(trainerId);
+            }
+        });
+
+        document.getElementById("find-updated-workout-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Отмена действия по умолчанию для submit формы
+
+            var workoutIdInput = document.getElementById("workout_id");
+            var workoutId = workoutIdInput.value.trim();
+
+            if (workoutId !== "") {
+                document.getElementById("update-workout_id").value = workoutId;
+                fetchWorkoutDataFromServer(workoutId);
+            }
+        });
+
+
+        // Функция для получения данных о тренере с сервера
+        function fetchTrainerDataFromServer(trainerId) {
+            fetch("/get_trainer_data?trainer_id=" + trainerId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+
+                        // Если данные успешно получены, отображаем форму редактирования тренера
+                        document.getElementById("hiddenContent6").style.display = "block";
+
+                        // Обновляем значения в форме данными, полученными с сервера
+                        document.getElementById("update-trainer_name").value = data.data.name;
+                        document.getElementById("update-trainer_email").value = data.data.email;
+                        document.getElementById("update-trainer_phone").value = data.data.phone;
+                        document.getElementById("update-trainer_specialization").value = data.data.specialization;
+                        document.getElementById("update-trainer_img").value = data.data.img;
+                    } else {
+                        // Если success=false, добавьте класс ошибки к полю ввода trainer_id
+                        document.getElementById("trainer_id").classList.add("error");
+                        // Скрыть форму редактирования тренера в случае ошибки
+                        document.getElementById("hiddenContent6").style.display = "none";
+
+                        console.error("Произошла ошибка при получении данных тренера.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Ошибка при получении данных тренера:", error);
+                });
+        }
+
+    </script>
+
+    <script>
+        // Обработка клика по кнопке и отображения/скрытия контейнера
+        document.getElementById('find-users-button').addEventListener('click', function() {
+            var content = document.getElementById('hidden-find-user-form');
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block'; // Отобразить контейнер
+            } else {
+                content.style.display = 'none'; // Скрыть контейнер
+            }
+
+        });
+
+        document.getElementById("delete-user-button").addEventListener("click", function () {
+            var form = document.getElementById("hiddenContent2");
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        });
+
+        document.getElementById('find-workouts-button').addEventListener('click', function() {
+            var content = document.getElementById('hidden-find-workout-form');
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block'; // Отобразить контейнер
+            } else {
+                content.style.display = 'none'; // Скрыть контейнер
+            }
+
+        });
+
+        document.getElementById("find-trainers-button").addEventListener("click", function () {
+            var form = document.getElementById("hiddenContent3");
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        });
+
+        document.getElementById("add-trainer-button").addEventListener("click", function () {
+            var form = document.getElementById("hidden-add-trainer-form");
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        });
+
+        document.getElementById("delete-trainer-button").addEventListener("click", function () {
+            var form = document.getElementById("hiddenContent4");
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        });
+
+        document.getElementById("delete-workout-button").addEventListener("click", function () {
+            var form = document.getElementById("hidden-delete-workout-form");
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        });
+
+        document.getElementById("show-update-trainer").addEventListener("click", function () {
+            var form5 = document.getElementById("hiddenContent5");
+            var form6 = document.getElementById("hiddenContent6");
+
+            if (form5.style.display === "none" || form5.style.display === "") {
+                form5.style.display = "block";
+                form6.style.display = "none"; // Скрываем hiddenContent6
+            } else {
+                form5.style.display = "none";
+                form6.style.display = "none";
+            }
+        });
+
+        document.getElementById("show-update-workout").addEventListener("click", function () {
+            var form1 = document.getElementById("hidden-find-updated-workout-form");
+            var form2 = document.getElementById("hidden-update-workout-form");
+
+            if (form1.style.display === "none" || form1.style.display === "") {
+                form1.style.display = "block";
+                form2.style.display = "none";
+            } else {
+                form1.style.display = "none";
+                form2.style.display = "none";
+            }
+        });
+
+        document.getElementById("add-workout-button").addEventListener("click", function () {
+            var form = document.getElementById("hidden-add-workout-form");
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        });
+
+        document.getElementById("export_db_to_json_button").addEventListener("click", function () {
+            var form = document.getElementById("hidden-export-database-form");
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var usersTextContent = document.querySelector('.users-text-content');
+            var userNameInput = document.getElementById('find_user');
+
+            var trainersTextContent = document.querySelector('.trainers-text-content');
+            var trainerNameInput = document.getElementById('find_trainer');
+
+            var workoutsTextContent = document.querySelector('.workouts-text-content');
+            var workoutNameInput = document.getElementById('find_workout');
+
+            document.getElementById('find-users-button').addEventListener('click', function() {
+
+                usersTextContent.innerHTML = '';
+                userNameInput.value = '';
+            });
+
+            document.getElementById('find-trainers-button').addEventListener('click', function() {
+
+                trainersTextContent.innerHTML = '';
+                trainerNameInput.value = '';
+            });
+
+            document.getElementById('find-workouts-button').addEventListener('click', function() {
+
+                workoutsTextContent.innerHTML = '';
+                workoutNameInput.value = '';
+            });
+        });
+
+        // Очистка поля ввода при нажатии кнопки "Удалить пользователя"
+        document.getElementById("delete-user-button").addEventListener("click", function () {
+            var userIdInput = document.getElementById("delete-user_id");
+
+            userIdInput.value = '';
+            userIdInput.classList.remove("error");
+
+        });
+
+        document.getElementById("delete-trainer-button").addEventListener("click", function () {
+
+            var trainerIdInput = document.getElementById("delete-trainer_id");
+
+            trainerIdInput.value = '';
+            trainerIdInput.classList.remove("error");
+        });
+
+        document.getElementById("delete-workout-button").addEventListener("click", function () {
+
+            var workoutIdInput = document.getElementById("delete-workout_id");
+
+            workoutIdInput.value = '';
+            workoutIdInput.classList.remove("error");
+        });
+
+        document.getElementById("show-update-trainer").addEventListener("click", function () {
+
+            var trainerId = document.getElementById("trainer_id");
+
+            trainerId.value = '';
+            trainerId.classList.remove("error");
+
+        });
+
+        document.getElementById("show-update-workout").addEventListener("click", function () {
+
+            var workoutId = document.getElementById("workout_id");
+            var workoutSchedule = document.getElementById("update-workout_schedule");
+
+            workoutId.value = '';
+            workoutId.classList.remove("error");
+            workoutSchedule.classList.remove("error");
+
+        });
+
+        document.getElementById("export_db_to_json_button").addEventListener("click", function () {
+
+            var jsonPath = document.getElementById("json-path");
+
+            jsonPath.value = '';
+            jsonPath.classList.remove("error");
+
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var userIdInput = document.getElementById('delete-user_id');
+            var trainerIdInput = document.getElementById('delete-trainer_id');
+            var workoutIdInput = document.getElementById('delete-workout_id');
+            var trainer_idInput = document.getElementById('trainer_id');
+            var workout_idInput = document.getElementById('workout_id');
+            var trainer_emailInput = document.getElementById('add-trainer_email');
+            var trainer_phoneInput = document.getElementById('add-trainer_phone');
+            var added_trainer_idInput = document.getElementById('workout-added-trainer_id');
+            var workout_scheduleInput = document.getElementById('workout_schedule');
+            var update_workout_scheduleInput = document.getElementById('update-workout_schedule');
+            var jsonPathInput = document.getElementById('json-path');
+
+            userIdInput.addEventListener('focus', function() {
+                // Удаление класса ошибки с поля ввода id пользователя
+                userIdInput.classList.remove('error');
+            });
+
+            trainerIdInput.addEventListener('focus', function() {
+
+                trainerIdInput.classList.remove('error');
+            });
+
+            workoutIdInput.addEventListener('focus', function() {
+
+                workoutIdInput.classList.remove('error');
+            });
+
+            trainer_idInput.addEventListener('focus', function() {
+
+                trainer_idInput.classList.remove('error');
+            });
+
+            workout_idInput.addEventListener('focus', function() {
+
+                workout_idInput.classList.remove('error');
+            });
+
+            trainer_emailInput.addEventListener('focus', function() {
+
+                trainer_emailInput.classList.remove('error');
+            });
+
+            trainer_phoneInput.addEventListener('focus', function() {
+
+                trainer_phoneInput.classList.remove('error');
+            });
+
+            added_trainer_idInput.addEventListener('focus', function() {
+
+                added_trainer_idInput.classList.remove('error');
+            });
+
+            workout_scheduleInput.addEventListener('focus', function() {
+
+                workout_scheduleInput.classList.remove('error');
+            });
+
+            update_workout_scheduleInput.addEventListener('focus', function() {
+
+                update_workout_scheduleInput.classList.remove('error');
+            });
+
+            jsonPathInput.addEventListener('focus', function() {
+
+                jsonPathInput.classList.remove('error');
+            });
+        });
+    </script>
+
+    <script>
+        document.getElementById("show-update-trainer").addEventListener("click", function () {
+            var button = this;
+            var buttonText = button.innerText.trim();  // Получаем текст кнопки и убираем лишние пробелы
+
+            // Проверяем текущий текст кнопки
+            if (buttonText === "Изменить данные тренера") {
+            } else if (buttonText === "Изменение прошло успешно!") {
+                button.innerText = "Изменить данные тренера";
+                // Дополнительные действия, если необходимо
+            }
+        });
+
+        document.getElementById("show-update-workout").addEventListener("click", function () {
+            var button = this;
+            var buttonText = button.innerText.trim();  // Получаем текст кнопки и убираем лишние пробелы
+
+            // Проверяем текущий текст кнопки
+            if (buttonText === "Изменить информацию тренировки") {
+            } else if (buttonText === "Изменение прошло успешно!") {
+                button.innerText = "Изменить информацию тренировки";
+            }
+        });
+
+        document.getElementById("delete-user-button").addEventListener("click", function () {
+            var button = this;
+            var buttonText = button.innerText.trim();  // Получаем текст кнопки и убираем лишние пробелы
+
+            // Проверяем текущий текст кнопки
+            if (buttonText === "Удалить пользователя") {
+            } else if (buttonText === "Пользователь успешно удален!") {
+                button.innerText = "Удалить пользователя";
+            }
+        });
+
+        document.getElementById("delete-trainer-button").addEventListener("click", function () {
+            var button = this;
+            var buttonText = button.innerText.trim();  // Получаем текст кнопки и убираем лишние пробелы
+
+            // Проверяем текущий текст кнопки
+            if (buttonText === "Удалить тренера") {
+            } else if (buttonText === "Удаление прошло успешно!") {
+                button.innerText = "Удалить тренера";
+            }
+        });
+
+        document.getElementById("delete-workout-button").addEventListener("click", function () {
+            var button = this;
+            var buttonText = button.innerText.trim();  // Получаем текст кнопки и убираем лишние пробелы
+
+            // Проверяем текущий текст кнопки
+            if (buttonText === "Удалить тренировку") {
+            } else if (buttonText === "Удаление прошло успешно!") {
+                button.innerText = "Удалить тренировку";
+            }
+        });
+
+        document.getElementById("add-trainer-button").addEventListener("click", function () {
+            var button = this;
+            var buttonText = button.innerText.trim();  // Получаем текст кнопки и убираем лишние пробелы
+
+            // Проверяем текущий текст кнопки
+            if (buttonText === "Добавить тренера") {
+            } else if (buttonText === "Добавление прошло успешно!") {
+                button.innerText = "Добавить тренера";
+            }
+        });
+
+        document.getElementById("add-workout-button").addEventListener("click", function () {
+            var button = this;
+            var buttonText = button.innerText.trim();  // Получаем текст кнопки и убираем лишние пробелы
+
+            // Проверяем текущий текст кнопки
+            if (buttonText === "Добавить тренировку") {
+            } else if (buttonText === "Добавление прошло успешно!") {
+                button.innerText = "Добавить тренировку";
+            }
+        });
+
+        document.getElementById("export_db_to_json_button").addEventListener("click", function () {
+            var button = this;
+            var buttonText = button.innerText.trim();  // Получаем текст кнопки и убираем лишние пробелы
+
+            // Проверяем текущий текст кнопки
+            if (buttonText === "Экспортировать БД в JSON") {
+            } else if (buttonText === "Экспортировано успешно!") {
+
+                button.innerText = "Экспортировать БД в JSON";
+
+            }
+        });
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.7/dist/inputmask.min.js"></script>
+    <script>
+      var selector = document.getElementById("add-trainer_phone");
+      var im = new Inputmask("+375 (99) 999-99-99");
+      im.mask(selector);
+    </script>
+
+</body>
+</html>
+

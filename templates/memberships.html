@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="header-line">
+       <div class="header-logo">
+           <div class="logo_img">
+               <img src="{{ url_for('static', filename='logo_img.png') }}">
+           </div>
+
+           <div class="header-line-text">
+               <div class="logo_text">EnergyFlow</div>
+
+               <div class="other-text">ЛИЧНЫЙ КАБИНЕТ</div>
+           </div>
+       </div>
+
+        <div class="header-exit">
+           <a href="/" class="exit-button">Главная страница</a>
+       </div>
+    </div>
+
+    <div class="navigation-bar">
+        <button class="nav-button" id="trainers-button">Тренеры</button>
+        <button class="nav-button" id="profile-button">Профиль</button>
+        <button class="nav-button" id="memberships-button">Абонементы</button>
+    </div>
+
+
+    <div class="memberships">
+
+        <div class="myMemberships">
+            <div class="container_title">ВАШИ АБОНЕМЕНТЫ</div>
+
+            <div class="valid_Memberships">
+                {% for your_membership in your_memberships_data %}
+                    <div class="oneMembership">
+                        <div class="your-membership-info">
+                            <p>{{ your_membership[2] }}</p>
+                            <p><span>Окончание действия:</span> {{ your_membership[1] }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <div class="allMemberships">
+            {% for membership in memberships_data %}
+                <div class="oneMembership">
+
+                    <div class="membership-info">
+                        <p>{{ membership[4] }}</p>
+                        <p>{{ membership[3] }} BYN</p>
+                    </div>
+
+                    <div class="memberships-button">
+                        <form action="/buy_membership/{{ membership[0] }}" method="post">
+                            <button type="submit" class="buy-button" data-membership-id="{{ membership[0] }}">Купить</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('trainers-button').addEventListener('click', function() {
+            window.location.href = '/train';
+        });
+
+        // Обработчик клика по кнопке профиля, перенаправляющий пользователя на страницу профиля.
+        document.getElementById('profile-button').addEventListener('click', function() {
+            window.location.href = '/prof';
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var profileButton = document.getElementById('memberships-button');
+            profileButton.classList.add('active');
+
+            const buttons = document.querySelectorAll('.nav-button');
+
+            buttons.forEach(button => {
+                button.addEventListener('mouseover', function() {
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+
+                button.addEventListener('mouseout', function() {
+                    if (this !== profileButton) {
+                        this.classList.remove('active');
+                        profileButton.classList.add('active');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.buy-button').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    if (event.type === 'click') {  // Проверка типа события
+                        event.preventDefault();
+                        const membershipId = this.getAttribute('data-membership-id');
+
+                        fetch(`/buy_membership/${membershipId}`, {
+                            method: 'POST',
+
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.href = '/memberships';
+                            } else {
+                                return response.json();
+                            }
+                        })
+                        .then(data => {
+                            if (data && data.error) {
+                                alert(data.error);
+                            }
+                        })
+                        .catch(error => console.error('Ошибка:', error));
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>

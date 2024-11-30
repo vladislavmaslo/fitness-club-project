@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main_styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="main_content">
+        <div class="header-line">
+            <div class="logo_container">
+                <div class="logo_image">
+                    <img src="{{ url_for('static', filename='logo_img.png') }}">
+                </div>
+
+                <div class="logo_text">
+                    EnergyFlow
+                </div>
+            </div>
+        </div>
+
+        <div class="text_container">
+            <div class="big_text">
+                Наша страсть — это ваш успех.
+            </div>
+
+            <div class="small_text">
+                <p>Только преодолев себя ты сможешь покорить вершины и стать тем, кем давно мечтал</p>
+                <p>Каждый день, прожитый в бездействии — утраченная возможность стать сильнее и на шаг ближе к мечте</p>
+                <p>Присоединись к EnergyFlow и разрушь все преграды на пути к своим целям</p>
+            </div>
+        </div>
+
+        <div class="button_container">
+            <a href="/registration" class="button">Присоединиться</a>
+            <a href="/log_in" class="button">Войти</a>
+        </div>
+
+    </div>
+    
+</body>
+
+</html>

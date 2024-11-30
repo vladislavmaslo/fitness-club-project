@@ -1,0 +1,685 @@
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('jym_image.jpeg');
+    height: 100vh;
+    background-size: 100% 100%;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+}
+
+.header-line {
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    margin: 30px;
+}
+
+.header-line-text {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: darkgray;
+}
+
+.logo_text {
+    color: #6A5C3E;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.navigation-bar {
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    border: 1px solid #3a3a3a;
+}
+
+#profile-button {
+    border: none;
+}
+
+.nav-button {
+    height: 66px;
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-left: 1px solid #3a3a3a;
+    border-right: 1px solid #3a3a3a;
+    width: 15%;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.nav-button.active {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    transition: box-shadow 0.2s ease;
+}
+
+.container {
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.person_info-container, .workouts-info-container {
+    padding: 35px;
+    height: 50%;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 3px grey;
+    color: white;
+    overflow-y: auto;
+}
+
+
+.workouts-info-container .container_data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 2px solid rgba(255, 255, 255, 0.5);
+    padding-top: 20px;
+}
+
+
+.workouts-info-container::-webkit-scrollbar {
+    background-color: rgba(0, 0, 0, 0);
+    width: 10px;
+}
+
+.workouts-info-container::-webkit-scrollbar-thumb {
+    background: darkgray;
+    border-radius: 5px;
+}
+
+.container_data {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.container_title {
+    color: darkgray;
+}
+
+.person_info-container p {
+    margin: 0;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.workouts-info-container p {
+    margin: 0;
+}
+
+.person_info-container .data {
+    text-align: right;
+}
+
+.exit-button {
+    font-family: 'Montserrat', sans-serif;
+    padding: 15px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 30px;
+    letter-spacing: 2px;
+    border: 2px solid #6A5C3E;
+    text-decoration: none;
+}
+
+.exit-button:hover {
+    background-color: #41372A;
+    transition: background-color 0.2s ease;
+}
+
+.workout-record {
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.delete-button {
+    font-family: 'Montserrat', sans-serif;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 5px;
+    box-shadow: 0px 0px 2px 1px grey;
+    color: white;
+}
+
+.delete-button:hover, .buy-button:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 5px 2px grey;
+    transition: background-color 0.2s ease;
+}
+
+.memberships {
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+
+}
+
+.memberships p {
+    margin: 0;
+}
+
+.myMemberships, .allMemberships {
+    padding: 40px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 3px grey;
+    color: white;
+    overflow-y: auto;
+    height: 60%;
+    width: 30%;
+}
+
+.allMemberships {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 50%;
+}
+
+.oneMembership {
+    display: flex;
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 3px grey;
+    color: white;
+}
+
+.membership-info {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.membership-button {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.allMemberships::-webkit-scrollbar,
+.myMemberships::-webkit-scrollbar {
+    background-color: rgba(0, 0, 0, 0);
+    width: 10px;
+}
+
+.allMemberships::-webkit-scrollbar-thumb,
+.myMemberships::-webkit-scrollbar-thumb {
+    background: darkgray;
+    border-radius: 10px;
+}
+
+.valid_Memberships {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.your-membership-info span {
+    color: darkgray;
+}
+
+.buy-button {
+    font-family: 'Montserrat', sans-serif;
+    margin-left: 10px;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 5px;
+    box-shadow: 0px 0px 2px 1px grey;
+    color: white;
+}
+
+
+/*-----------------------------------------------ADMIN_PANEL.HTML-----------------------------------------------------*/
+
+.admin_workspace {
+    height: 85%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.users-text-content {
+    flex-direction: column;
+    background: lightgrey;
+    color: black;
+    overflow-y: auto;
+    height: 175px;
+    padding-bottom: 20px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.users-text-content p {
+    margin: 0;
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+.trainers-text-content {
+    background: lightgrey;
+    color: black;
+    overflow-y: auto;
+    height: 225px;
+    padding-bottom: 15px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.trainers-text-content p {
+    margin: 0;
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+.workouts-text-content {
+    background: lightgrey;
+    color: black;
+    overflow-y: auto;
+    height: 260px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.workouts-text-content p {
+    margin: 0;
+    padding: 10px;
+}
+
+.find-user-workspace, .delete-user-workspace,
+.find-trainer-workspace, .delete-trainer-workspace, .update-trainer-workspace, .add-trainer-workspace,
+.find-workout-workspace, .delete-workout-workspace, .update-workout-workspace, .add-workout-workspace,
+.export-db-workspace {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    padding-bottom: 15px;
+}
+
+.hidden-content {
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    display: flex;
+    flex-direction: row;
+}
+
+#update-trainer-form, #add-trainer-form,
+#update-workout-form, #add-workout-form {
+    flex-direction: column;
+}
+
+input {
+    flex: 1;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+textarea {
+    font-family: 'Montserrat', sans-serif;
+    resize: none;
+    flex: 1;
+}
+
+.find-user-button, .delete-user-button,
+.find-trainer-button, .delete-trainer-button,
+.find-workout-button, .delete-workout-button
+{
+    width: 20%;
+}
+
+#go-to-update, #go-to-update2 {
+    width: 40%;
+}
+
+#find-users-button, #delete-user-button,
+#find-trainers-button, #delete-trainer-button, #show-update-trainer, #add-trainer-button,
+#find-workouts-button, #delete-workout-button, #show-update-workout, #add-workout-button,
+#export_db_to_json_button {
+    font-family: 'Montserrat', sans-serif;
+    padding: 5px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    border-radius: 10px;
+    border-radius: 5px;
+    border: 2px solid #6A5C3E;
+    text-decoration: none;
+}
+
+#find-users-button:hover, #delete-user-button:hover,
+#find-trainers-button:hover, #delete-trainer-button:hover, #show-update-trainer:hover, #add-trainer-button:hover,
+#find-workouts-button:hover, #delete-workout-button:hover, #show-update-workout:hover, #add-workout-button:hover,
+#export_db_to_json_button:hover {
+    background-color: #41372A;
+    transition: background-color 0.2s ease;
+}
+
+.find-user-button, .delete-user-button,
+.find-trainer-button, .delete-trainer-button, .update-trainer-button, .add-trainer-button,
+.find-workout-button, .delete-workout-button, .update-workout-button, .add-workout-button,
+#go-to-update, #go-to-update2, #json-done-button {
+    font-family: 'Montserrat', sans-serif;
+    padding: 5px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    border-radius: 5px;
+    border: 2px solid darkgray;
+    text-decoration: none;
+
+}
+
+input::placeholder, textarea::placeholder {
+    color: black;
+}
+
+.find-user-button:hover, .delete-user-button:hover,
+.find-trainer-button:hover, .delete-trainer-button:hover, .update-trainer-button:hover, .add-trainer-button:hover,
+.find-workout-button:hover, .delete-workout-button:hover, .update-workout-button:hover, .add-workout-button:hover,
+#go-to-update:hover, #go-to-update2:hover, #json-done-button:hover {
+    background-color: #5E5E5E;
+    transition: background-color 0.2s ease;
+}
+
+#find_user, #delete-user_id,
+#find_trainer, #delete-trainer_id, #trainer_id,
+#find_workout, #delete-workout_id, #workout_id,
+#json-path {
+    border-radius: 5px;
+}
+
+.actions-on-workouts, .actions-on-trainers {
+    height: 90%;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 3px grey;
+    color: white;
+    overflow-y: auto;
+}
+
+.actions-on-workouts::-webkit-scrollbar,
+.actions-on-trainers::-webkit-scrollbar {
+    background-color: rgba(0, 0, 0, 0);
+    width: 10px;
+}
+
+.actions-on-workouts::-webkit-scrollbar-thumb,
+.actions-on-trainers::-webkit-scrollbar-thumb {
+    background: darkgray;
+    border-radius: 5px;
+}
+
+.center {
+    height: 90%;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.actions-on-db, .actions-on-users {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 3px grey;
+    color: white;
+    overflow-y: auto;
+}
+
+.actions-on-db {
+    height: 25%;
+}
+
+.actions-on-users {
+    flex: 1;
+}
+
+.workspace_title {
+    color: darkgray;
+    padding: 15px;
+}
+
+.error {
+    background-color: #ffcccc; /* Красный фон */
+}
+
+
+/*--------------------------------------------TRAINERS.HTML-----------------------------------------------------------*/
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#myModal {
+background-color: rgba(0, 0, 0, 0.6);
+}
+
+
+.modal-content {
+    padding: 0;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    height: 50%;
+    width: 50%;
+    position: relative;
+    color: black;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 3px grey;
+}
+
+.modal-content::-webkit-scrollbar {
+    display: none;
+}
+
+.close {
+    padding: 4px 10px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.workout-description {
+    height: 100%;
+}
+
+.trainers-images {
+    padding: 25px 0px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.trainer-image {
+    margin: 25px;
+    height: 400px;
+    width: 400px;
+    box-shadow: 0 0 20px white;
+}
+
+#trainer-thumbnail {
+    height: 300px;
+    width: 300px;
+}
+
+#showWorkouts {
+    font-family: 'Montserrat', sans-serif;
+    padding: 10px;
+    color: black;
+    background-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+    border-radius: 10px;
+    border-radius: 5px;
+    border: 2px solid #6A5C3E;
+    text-decoration: none;
+}
+
+#showWorkouts:hover {
+    background-color: #41372A;
+    transition: background-color 0.2s ease;
+    color: white;
+}
+
+#workoutModal .modal-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-shadow: none;
+}
+
+#workoutModal p {
+padding: 0;
+margin-bottom: 0;
+}
+
+#workoutModal h3 {
+padding: 0;
+margin: 0;
+}
+
+.workout-info {
+    padding-bottom: 15px;
+    padding-right: 35px;
+    padding-left: 20px;
+    padding-top: 15px;
+}
+
+.workout-info-none {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.sign-up-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    color: darkgrey;
+    transition: color 0.3s;
+    position: relative;
+}
+
+.sign-up-button:hover {
+    color: grey;
+}
+
+/* Стиль подсказки */
+.sign-up-button::before {
+    content: 'Нажмите, чтобы записаться';
+    font-family: 'Montserrat', sans-serif;
+    color: darkgrey;
+    position: absolute;
+    top: 2px;
+    left: 30px;
+    opacity: 0;
+    visibility: hidden;
+    white-space: nowrap;
+    font-size: 16px;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.sign-up-button:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/*-----------------------------------------------------------------*/
+
+.trainer-image-wrapper {
+    position: relative;
+    display: inline-block;
+    filter: brightness(70%);
+    transition: filter 0.2s;
+}
+
+.trainer-image-wrapper:hover {
+    filter: brightness(90%);
+    cursor: pointer;
+}
+
+.trainer-specialization {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: lightgrey ;
+    padding: 8px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 25px;
+    border-radius: 5px;
+}
+
+

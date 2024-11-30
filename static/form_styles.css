@@ -1,0 +1,184 @@
+html {
+    height: 100%;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('jym_image.jpeg');
+    background-size: 100% 100%;
+    background-position: center;
+}
+
+#main-holder {
+    width: 40%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 3px grey;
+    color: white;
+}
+
+#login-error-msg-holder {
+    width: 120%;
+    height: 110px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#login-error-msg {
+    width: 25%;
+    text-align: center;
+    margin: 0px;
+    padding: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #8a0000;
+    border: 1px solid #8a0000;
+    background-color: #e58f8f;
+    opacity: 0;
+}
+
+#error-msg-second-line {
+    display: block;
+}
+
+.login-form-field::placeholder, .recovery-form-field::placeholder, .reset-form-field::placeholder {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-form-field, .recovery-form-field, .reset-form-field {
+    width: 155px;
+    caret-color: white;
+    border: none;
+    border-bottom: 1px solid white;
+    border-radius: 3px;
+    outline: none;
+    padding: 0px 0px 5px 5px;
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#login-form-submit, #login-form-skip, #recovery-form-submit, #reset-form-submit {
+    padding: 7px;
+    background-color: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 5px;
+    border: 2px solid #6A5C3E;
+    letter-spacing: 2px;
+}
+
+#login-form-submit:hover, #recovery-form-submit:hover, #reset-form-submit:hover {
+    background-color: #41372A;
+    transition: background-color 0.2s ease;
+}
+
+#username-field:-webkit-autofill,
+#username-field:-webkit-autofill:hover,
+#username-field:-webkit-autofill:focus,
+#username-field:-webkit-autofill:active {
+    -webkit-transition: background-color 5000s ease-in-out 0s;
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: white !important;
+}
+
+#email-field:-webkit-autofill,
+#email-field:-webkit-autofill:hover,
+#email-field:-webkit-autofill:focus,
+#email-field:-webkit-autofill:active {
+    -webkit-transition: background-color 5000s ease-in-out 0s;
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: white !important;
+}
+
+/*---------------------------------------------------MEMBER_INFO.HTML-------------------------------------------------*/
+
+fieldset {
+    border-radius: 10px;
+}
+
+.info-field {
+    caret-color: white;
+    border: none;
+    border-bottom: 1px solid white;
+    border-radius: 3px;
+    outline: none;
+    padding: 0px 0px 5px 5px;
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+}
+
+.info-field::placeholder {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#info, #login-form, #recovery-form, #reset-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+}
+
+#birthdate {
+    font-family: 'Montserrat', sans-serif;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: brightness(0) invert(1);
+}
+
+input::selection {
+    background-color: grey;
+}
+
+#login-header {
+    margin: 0;
+}
+
+.left_right-container {
+    display: flex;
+    flex-direction: linear;
+    align-items: center;
+    gap: 10px;
+}
+
+.right-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-line {
+    font-size: 15px;
+    color: darkgray;
+}
+
+.register-line a, .password-recovery a, .back-to-login a {
+    text-decoration: none;
+    color: white;
+    }
+
+.info-field:-webkit-autofill,
+.info-field:-webkit-autofill:hover,
+.info-field:-webkit-autofill:focus,
+.info-field:-webkit-autofill:active {
+    -webkit-transition: background-color 5000s ease-in-out 0s;
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: white !important;
+}
+
